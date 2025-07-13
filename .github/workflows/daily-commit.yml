@@ -2,26 +2,26 @@ name: Daily Commit
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Every day at 12 AM UTC
-  workflow_dispatch:
+    - cron: '0 0 * * *'  # Every day at midnight UTC
+  workflow_dispatch:      # Allow manual runs too
 
 jobs:
   commit:
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: write
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Make a daily commit
+      - name: Make 12 commits
         run: |
-          echo "✅ Commit on $(date)" >> activity.log
-          git config user.name "Wajeeha Nadeem"
+          git config user.name "Wajeeha"
           git config user.email "47328@students.riphah.edu.pk"
-          git add activity.log
-          git commit -m "Daily activity update" || echo "Nothing to commit"
-          git push
+          
+          for i in {1..12}; do
+            echo "✅ Commit $i on $(date)" >> activity.log
+            git add activity.log
+            git commit -m "Auto commit $i"
+          done
 
+          git push
